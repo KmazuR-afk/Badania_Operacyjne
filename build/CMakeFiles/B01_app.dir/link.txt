@@ -1,1 +1,0 @@
-/usr/bin/c++ CMakeFiles/B01_app.dir/source/Graf.cpp.o CMakeFiles/B01_app.dir/source/main.cpp.o -o bin/B01_app 
