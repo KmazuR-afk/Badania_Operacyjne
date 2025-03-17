@@ -1,0 +1,3 @@
+/home/kacper/Desktop/B01/build/CMakeFiles/B01_app.dir
+/home/kacper/Desktop/B01/build/CMakeFiles/edit_cache.dir
+/home/kacper/Desktop/B01/build/CMakeFiles/rebuild_cache.dir
