@@ -8,6 +8,10 @@
 #include <unordered_set>
 #include <queue>
 #include <stack>
+#include <cstdlib>
+#include <ctime>
+#include <tuple>
+using Edge = std::tuple<int, int, int>;
 class Graf{
     private:
         std::vector<std::vector<int>> neigh_Matr;
@@ -28,5 +32,6 @@ class Graf{
         bool isCyclic(int v);
         bool isConnected();
         void unDirectify();
+        std::vector<Edge> Prim();
 };
 #endif

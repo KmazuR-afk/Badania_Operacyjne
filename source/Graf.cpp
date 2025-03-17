@@ -132,6 +132,8 @@ bool Graf::isCyclic(int v) {
     }
     return false;
 }
+
+
 void Graf::unDirectify() {
     for (int i = 0; i < numVertices; i++) {
         for (int j = i; j < numVertices; j++) {
@@ -182,4 +184,35 @@ bool Graf::isConnected(){
         display(3);
         return isConnected();
     }
+}
+
+//algorytm Prima bazowany na AISD I LO i Abdul Bari 3.5 Prims and Kruskals ...
+vector<Edge> Graf::Prim(){
+    srand(time(0));
+    int r_ver=0;//rand()%numVertices;
+    vector<Edge> ret;
+    vector<bool> visited(numVertices,false);
+    visited[r_ver]=true;
+    priority_queue<Edge,vector<Edge>,greater<Edge>> Q;
+    for(const auto& u: adj_List[r_ver])
+    {
+        if(!visited[u.first]){
+            Q.push({u.second,r_ver,u.first});  
+        }
+    }
+    while(!Q.empty()){
+        auto [weight,from,to]=Q.top();
+        Q.pop();
+        if(visited[to]) continue;
+
+        ret.push_back({weight,from,to});
+        visited[to]=true;
+        for(const auto& u: adj_List[to])
+        {
+            if(!visited[u.first]){
+                Q.push({u.second,to,u.first});  
+            }
+        }
+    }
+    return ret;
 }
