@@ -216,3 +216,29 @@ vector<Edge> Graf::Prim(){
     }
     return ret;
 }
+
+//algorytm Dijkstry bazowany na stronie Algorytmy i struktury danych i Algorytm.edu.pl
+vector<vector<int>> Graf::Dijkstra(int start){
+    const int INF = __INT_MAX__;
+    priority_queue<Edge,vector<Edge>,greater<Edge>> Q;
+    vector<int> dist(numVertices, INF);
+    std::vector<int> prev(numVertices, -1);
+    std::vector<bool> visited(numVertices, false);
+    dist[start] = 0;
+    prev[start]= -1;
+    Q.push({0,-1,start});
+    while(!Q.empty()){
+        auto [weight,p,u]=Q.top();
+        Q.pop();
+        if (visited[u]) continue;
+        visited[u]=true;
+        prev[u] = p;
+        for (const auto& [neighbor, edgeWeight] : adj_List[u]) {
+            if (!visited[neighbor] && dist[u] + edgeWeight < dist[neighbor]) {
+                dist[neighbor] = dist[u] + edgeWeight;
+                Q.push({dist[neighbor], u, neighbor});
+            }
+        }
+    }
+    return {prev,dist};
+}

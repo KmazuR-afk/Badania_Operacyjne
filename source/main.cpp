@@ -2,9 +2,21 @@
 #include "../include/Graf.h"
 
 int main() {
-    Graf g1(10);
+    Graf g1(6);
     std::srand(std::time(0));
-    auto randomWeight = []() { return std::rand() % 10 + 1; };
+    g1.addEdge(0, 1, 3);
+g1.addEdge(0, 4, 3);
+g1.addEdge(0, 5, 6);
+
+g1.addEdge(1, 2, 1);
+g1.addEdge(1, 3, 3);
+
+g1.addEdge(2, 3, 3);
+g1.addEdge(2, 5, 1);
+
+g1.addEdge(5, 3, 1);
+g1.addEdge(4, 5, 2);
+    /*auto randomWeight = []() { return std::rand() % 10 + 1; };
     g1.addEdge(0, 1, randomWeight());
     g1.addEdge(1, 2, randomWeight());
     g1.addEdge(2, 3, randomWeight());
@@ -26,9 +38,9 @@ int main() {
     g1.addEdge(5, 9, randomWeight());
     g1.addEdge(6, 9, randomWeight());
     g1.addEdge(7, 9, randomWeight());
-    g1.addEdge(8, 9, randomWeight());
+    g1.addEdge(8, 9, randomWeight());*/
     g1.display(3);
-    std::vector<int> bfs1=g1.BFS(3);
+    /*std::vector<int> bfs1=g1.BFS(3);
     std::cout<<"BFS:\n";
     for(auto i:bfs1){
         std::cout<<i<<" -> ";
@@ -40,7 +52,11 @@ int main() {
     std::cout << "Drzewo rozpinające (waga, skąd, dokąd):\n";
     for (const auto& [weight, from, to] : prim) {
         std::cout << "(" << weight << ", " << from << ", " << to << ")\n";
-    }
+    }*/
+    std::vector<std::vector<int>> d=g1.Dijkstra();
+        for(int j=0;j<6;j++){
+            std::cout<<"poprzednik "<<d[0][j]<<" waga "<<d[1][j]<<std::endl;
+        }
     /*Graf g2(10);
 
     // Komponent 1 (cykl i dodatkowe krawędzie)

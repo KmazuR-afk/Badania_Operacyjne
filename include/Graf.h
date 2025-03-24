@@ -33,5 +33,6 @@ class Graf{
         bool isConnected();
         void unDirectify();
         std::vector<Edge> Prim();
+        std::vector<std::vector<int>> Dijkstra(int start=0);
 };
 #endif
