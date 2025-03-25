@@ -242,3 +242,70 @@ vector<vector<int>> Graf::Dijkstra(int start){
     }
     return {prev,dist};
 }
+
+vector<int> Graf::countHeuristicDijkstra(int goal){
+    std::vector<int> h(numVertices, INT_MAX);
+    std::priority_queue<std::pair<int, int>,
+                        std::vector<std::pair<int, int>>,
+                        std::greater<>> Q;
+
+    h[goal] = 0;
+    Q.push({0, goal});
+
+    while (!Q.empty()) {
+        auto [dist, u] = Q.top();
+        Q.pop();
+
+        for (const auto& [v, w] : adj_List[u]) {
+            if (h[u] + w < h[v]) {
+                h[v] = h[u] + w;
+                Q.push({h[v], v});
+            }
+        }
+    }
+
+    return h;
+}
+
+vector<vector<int>> Graf::Astar(int start,int goal,const vector<int>& h)
+{
+    vector<int> gScore(numVertices,__INT_MAX__);
+    vector<int> prev(numVertices,-1);
+    vector<bool> visited(numVertices,false);
+    priority_queue<Edge,vector<Edge>,greater<Edge>> Q;
+    vector<int> f(numVertices,0);
+    gScore[start]=0;
+    prev[start]=-1;
+    int tg=0;
+    Q.push({h[start],0,start});//recykling edge teraz f,g,vertex
+    while(!Q.empty()){
+        auto [f,g,u]=Q.top();
+        Q.pop();
+        if (visited[u]) continue;
+        visited[u]=true;
+        if(u==goal) break;
+        for(const auto& [v,edgeWeight]:adj_List[u])
+        {
+            tg=gScore[u]+edgeWeight;
+            if(tg<gScore[v] ){
+                gScore[v]=tg;
+                prev[v]=u;
+                Q.push({tg+h[v],tg,v});
+            }
+        }
+    }
+    vector<int>path_cost;
+    vector<int>road;
+    vector<int>rpath_cost;
+    vector<int>rroad;
+    for(int c=goal;c!=-1;c=prev[c])
+    {
+        path_cost.push_back(gScore[c]);
+        road.push_back(prev[c]);
+    }
+    for(int i=road.size()-2;i>-1;i--){
+        rpath_cost.push_back(path_cost[i]);
+        rroad.push_back(road[i]);
+    }
+    return {rroad,rpath_cost};
+}

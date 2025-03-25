@@ -34,5 +34,7 @@ class Graf{
         void unDirectify();
         std::vector<Edge> Prim();
         std::vector<std::vector<int>> Dijkstra(int start=0);
+        std::vector<int> countHeuristicDijkstra(int goal);
+        std::vector<std::vector<int>> Astar(int start,int goal,const std::vector<int>& h);
 };
 #endif
