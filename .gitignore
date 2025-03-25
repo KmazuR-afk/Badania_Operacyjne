@@ -3,3 +3,5 @@
 **/cmake_install.cmake
 **/Makefile
 **/B01_app
+**/B01_app.exe
+**/*.json
