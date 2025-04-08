@@ -61,7 +61,17 @@ int main() {
         for(int j=0;j<6;j++){
             std::cout<<"poprzednik "<<d[0][j]<<" waga "<<d[1][j]<<std::endl;
         }*/
-    std::vector<int> heur=g.countHeuristicDijkstra(7);
+    std::vector<int> heur={43
+        ,37
+        ,63
+        ,10
+        ,69
+        ,56
+        ,70
+        ,0
+        ,46
+        ,43
+        };
     std::cout<<"heurystyka:"<<std::endl;
     for(int u:heur){
         std::cout<<u<<" - ";
