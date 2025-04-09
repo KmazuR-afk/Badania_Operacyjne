@@ -309,3 +309,127 @@ vector<vector<int>> Graf::Astar(int start,int goal,const vector<int>& h)
     }
     return {rroad,rpath_cost};
 }
+ //Christfides funcs
+ vector<int> Graf::isOdd(const vector<Edge>& mst){
+    vector<int> degree(numVertices);
+    for(const auto& [weigh,to,from]:mst){
+        degree[from]++;
+        degree[to]++;
+    }
+    vector<int> odd;
+    for(int i =0;i<numVertices;i++){
+        if(degree[i]%2==1){
+            odd.push_back(i);
+        }
+    }
+    return odd;
+ }
+ vector<Edge> Graf::findMinimumMatching(vector<int> odd)
+ {
+    vector<Edge> match;
+    vector<bool> used(numVertices,false);
+    vector<int>unmatched=odd;
+    int best_f=-1;
+    int min_weight=INT_MAX;
+    int u;
+    while(!unmatched.empty()){
+        u=unmatched.back();
+        unmatched.pop_back();
+        if(used[u]) continue;
+
+        best_f=-1;
+        min_weight=INT_MAX;
+        for (int v:unmatched){
+            if(!used[v] && neigh_Matr[u][v]<min_weight && neigh_Matr[u][v]!=0){
+                min_weight = neigh_Matr[u][v];
+                best_f = v;
+            }
+        }
+        if(best_f!=-1){
+            match.push_back({min_weight,u,best_f});//waga,z,do
+            used[u]=true;
+            used[best_f]=true;
+        }
+    }
+    return match;
+ }
+ 
+ vector<Edge> Graf::mergeGraphs(const vector<Edge>& mst, const vector<Edge>& matching)
+ {
+    vector<Edge> merged=mst;
+
+    for (const auto& edge:matching)
+    {
+        merged.push_back(edge);
+    }
+    return merged;
+ }
+ //Hierholzer
+ vector<int> Graf::findEulerianTour(const vector<Edge>& multigraph){
+    unordered_map<int, vector<int>> tempAdj;
+
+    for (const auto& [weight, u, v] : multigraph) {
+        tempAdj[u].push_back(v);
+        tempAdj[v].push_back(u);
+    }
+
+    vector<int> tour;
+    stack<int> stack;
+    stack.push(multigraph.empty() ? 0 : get<1>(multigraph[0]));
+
+    while (!stack.empty()) {
+        int u = stack.top();
+        if (!tempAdj[u].empty()) {
+            int v = tempAdj[u].back();
+            tempAdj[u].pop_back();
+
+            // Usuń odwrotną krawędź (v → u)
+            auto& neighbors = tempAdj[v];
+            auto it = std::find(neighbors.begin(), neighbors.end(), u);
+            if (it != neighbors.end()) {
+                neighbors.erase(it);
+            }
+
+            stack.push(v);
+        } else {
+            tour.push_back(u);
+            stack.pop();
+        }
+    }
+
+    std::reverse(tour.begin(), tour.end());
+    return tour;
+ }
+ vector<int> Graf::shortcutEulerianTour(const vector<int>& eulerTour)
+ {
+    unordered_set<int> visited;
+    vector<int> hamiltonianPath;
+
+    for (int v : eulerTour) {
+        if (visited.find(v) == visited.end()) {
+            visited.insert(v);
+            hamiltonianPath.push_back(v);
+        }
+    }
+
+    if (!hamiltonianPath.empty()) {
+        hamiltonianPath.push_back(hamiltonianPath[0]);
+    }
+
+    return hamiltonianPath;
+ }
+ pair<vector<int>, int> Graf::christofidesTSP() {
+    vector<Edge> mst = Prim();
+    vector<int> oddVertices = isOdd(mst);
+    vector<Edge> matching = findMinimumMatching(oddVertices);
+    vector<Edge> multigraph = mergeGraphs(mst, matching);
+    vector<int> eulerTour = findEulerianTour(multigraph);
+    vector<int> tspPath = shortcutEulerianTour(eulerTour);
+    int length=0;
+    for(size_t i=0;i<tspPath.size()-1;i++){
+        length+=neigh_Matr[tspPath[i]][tspPath[i+1]];
+    }
+
+    return {tspPath,length};
+}
+

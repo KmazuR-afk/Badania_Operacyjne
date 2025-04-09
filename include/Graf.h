@@ -11,6 +11,8 @@
 #include <cstdlib>
 #include <ctime>
 #include <tuple>
+#include <algorithm>
+
 using Edge = std::tuple<int, int, int>;
 class Graf{
     private:
@@ -36,5 +38,12 @@ class Graf{
         std::vector<std::vector<int>> Dijkstra(int start=0);
         std::vector<int> countHeuristicDijkstra(int goal);
         std::vector<std::vector<int>> Astar(int start,int goal,const std::vector<int>& h);
+        //Christfides funcs
+        std::vector<int> isOdd(const std::vector<Edge>& mst);
+        std::vector<Edge> findMinimumMatching(std::vector<int> odd);
+        std::vector<Edge> mergeGraphs(const std::vector<Edge>& mst, const std::vector<Edge>& matching);
+        std::vector<int> findEulerianTour(const std::vector<Edge>& multigraph);
+        std::vector<int> shortcutEulerianTour(const std::vector<int>& eulerTour);
+        std::pair<std::vector<int>,int> christofidesTSP();
 };
 #endif
