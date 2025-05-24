@@ -91,8 +91,8 @@ void PERTGraph::printResults() {
     std::cout << "\n";
 }
 
-void PERTGraph::exportGantt(){
-    std::string filename="../GANTT.csv";
+void PERTGraph::exportGantt() {
+    std::string filename = "../GANTT.csv";
     std::ofstream file(filename);
     if (!file.is_open()) {
         std::cerr << "Nie można otworzyć pliku do zapisu!\n";
@@ -100,29 +100,35 @@ void PERTGraph::exportGantt(){
     }
 
     // Nagłówki
-    file << "Od;Do;Start;Czas;Krytyczny\n";
-for (const auto& act : activities) {
-    double start = EF.at(act.from);
-    double czas = act.te;
-    bool critical = (LS.at(act.to) - ES.at(act.to) == 0) && (LS.at(act.from) - ES.at(act.from) == 0);
+    file << "Od;Do;Start;Czas;Slack;Krytyczny\n";
 
-    std::ostringstream sStart, sCzas;
-    sStart << std::fixed << std::setprecision(2) << start;
-    sCzas << std::fixed << std::setprecision(2) << czas;
+    for (const auto& act : activities) {
+        double start = EF.at(act.from);
+        double czas = act.te;
+        double slack = LS.at(act.to) - ES.at(act.to);
+        bool critical = (slack == 0.0);
 
-    std::string startStr = sStart.str(); std::replace(startStr.begin(), startStr.end(), '.', ',');
-    std::string czasStr = sCzas.str(); std::replace(czasStr.begin(), czasStr.end(), '.', ',');
+        std::ostringstream sStart, sCzas, sSlack;
+        sStart << std::fixed << std::setprecision(2) << start;
+        sCzas << std::fixed << std::setprecision(2) << czas;
+        sSlack << std::fixed << std::setprecision(2) << slack;
 
-    file << act.from << ";" << act.to << ";" << startStr << ";" << czasStr << ";" << (critical ? "TAK" : "") << "\n";
-}
+        std::string startStr = sStart.str(); std::replace(startStr.begin(), startStr.end(), '.', ',');
+        std::string czasStr = sCzas.str(); std::replace(czasStr.begin(), czasStr.end(), '.', ',');
+        std::string slackStr = sSlack.str(); std::replace(slackStr.begin(), slackStr.end(), '.', ',');
+
+        file << act.from << ";" << act.to << ";" << startStr << ";" << czasStr << ";" << slackStr << ";"
+             << (critical ? "TAK" : "") << "\n";
+    }
+
     file.close();
     std::cout << "Zapisano dane do pliku: " << filename << std::endl;
     std::cout << "Generowanie wykresu Gantta w Pythonie...\n";
-    
-    //TE LINIE KODU NALEŻY ZMIENIĆ I DOSTARCZYĆ WŁASNĄ ŚCIEZKĘ DO KATALOGU PYTHON.EXE
+
     std::string pythonPath = "\"C:\\Program Files\\Python39\\python.exe\"";
     std::string command = pythonPath + " ../source/generate_gantt.py";
     int result = system(command.c_str());
+
     std::cout << "Kod zakończenia: " << result << "\n";
     if (result != 0) {
         std::cerr << "Nie udało się wygenerować wykresu Gantta!\n";
@@ -130,3 +136,4 @@ for (const auto& act : activities) {
         std::cout << "Wykres Gantta zapisany jako ../GANTT.png\n";
     }
 }
+

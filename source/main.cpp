@@ -24,7 +24,7 @@ int main() {
     g.addActivity(8, 9, 1, 1, 3);
     g.addActivity(8, 9, 4, 6, 9);  // uwaga: powtarzająca się krawędź – możesz pominąć jedną
     g.addActivity(9, 10, 2, 4, 7);
-
+    
     // Obliczamy algorytm PERT
     g.compute();
 
