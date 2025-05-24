@@ -70,7 +70,7 @@ Educational project. You are free to use and modify the code for learning and te
 
 ---
 
-## ✍️ Author
+## Author
 
 Repository created by **KmazuR-afk** as part of the *Badania operacyjne* course.
 
