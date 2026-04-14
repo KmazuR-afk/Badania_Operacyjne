@@ -48,7 +48,7 @@ make
 ```
 
 Running the application will generate `GANTT.csv` and a `GANTT.png` chart.
-Make sure the Python path in `PERTGraph.cpp` is correct:
+Make sure the Python path in `PERTGraph.cpp` is correct - for example:
 > ```cpp
 > std::string pythonPath = "\"C:\\Program Files\\Python39\\python.exe\"";
 > ```
